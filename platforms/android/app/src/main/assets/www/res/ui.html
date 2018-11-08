@@ -1,0 +1,31 @@
+<body>
+	<li title="%title%" id="conversation%uid%" onclick="Conversation.start('%uid%');"><img src="%picture%" class="avatar"/><span>%title%</span>
+<img src="res/image/png/option.png" class="option" onclick="ConvSetting.onEdit('%uid%');stopProp(event);"/>
+		<span class="msgCount" id="convCount%uid%">0</span>
+	</li>
+
+	<div class="ContactSetting">
+		<img id="profilePic"/>
+	</div>
+	<table>
+		<tr>
+			<td>Security Key</td>
+			<td><input class="textbox" onchange="ConvSetting.onChangeKey(event);" value="%skey%"/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><hr/></td>
+		</tr>
+		<tr>
+			<td>Storage</td>
+			<td>
+				<p>
+					<button class="blue btn" onclick="Conversation.delete('%uid%',false);"> Delete messages and keep the audience on the list </button>
+				</p>
+				<p>
+					<button class="red btn" onclick="Conversation.delete('%uid%',true);Conversation.remove('%uid%');"> Delete the conversation and all messages </button>
+				</p>
+			</td>
+		</tr>
+	</table>
+</body>

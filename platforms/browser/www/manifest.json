@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Flask",
+  "short_name": "Flask",
+  "version": "io.cordova.hellocordova",
+  "description": "A Very Secure Communication Tool",
+  "author": "Flask Developer",
+  "icons": [],
+  "start_url": "index.html"
+}
