@@ -108,6 +108,7 @@ function enableBackgroundMode(en){
 	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
 		if(en)cordova.plugins.backgroundMode.enable();
 		else cordova.plugins.backgroundMode.disable();
+		configBackgroundMode();
 
 		cordova.plugins.backgroundMode.on('activate', function() {
 			cordova.plugins.backgroundMode.disableWebViewOptimizations(); 
@@ -116,13 +117,13 @@ function enableBackgroundMode(en){
 		});
 
 		cordova.plugins.backgroundMode.on('deactivate', function() {
-			cordova.plugins.backgroundMode.enableWebViewOptimizations(); 
 			Messenger.receiveDelay=5000;
 			//Messenger.onHome();
 		});
 	}
 }
 function configBackgroundMode(){
+	cordova.plugins.backgroundMode.overrideBackButton();
 	cordova.plugins.backgroundMode.setDefaults({
 		title: "Flask",
 		text: "no new message"

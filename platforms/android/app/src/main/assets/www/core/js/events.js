@@ -103,3 +103,37 @@ function onErrorMyProfileImage(e){
 
 	TextAvatar.getTextAvatar(title,avatar,null,null,2);
 }
+
+function enableBackgroundMode(en){
+	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
+		if(en)cordova.plugins.backgroundMode.enable();
+		else cordova.plugins.backgroundMode.disable();
+		configBackgroundMode();
+
+		cordova.plugins.backgroundMode.on('activate', function() {
+			cordova.plugins.backgroundMode.disableWebViewOptimizations(); 
+			Messenger.receiveDelay=25000;
+			if(Messenger.activeObject)Messenger.activeObject.exit();
+		});
+
+		cordova.plugins.backgroundMode.on('deactivate', function() {
+			Messenger.receiveDelay=5000;
+			//Messenger.onHome();
+		});
+	}
+}
+function configBackgroundMode(){
+	cordova.plugins.backgroundMode.overrideBackButton();
+	cordova.plugins.backgroundMode.setDefaults({
+		title: "Flask",
+		text: "no new message"
+		});
+}
+function showNotification(msg){
+	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
+			cordova.plugins.backgroundMode.setDefaults({
+			title: "Flask",
+			text: msg
+		});
+	}
+}

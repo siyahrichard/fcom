@@ -46,6 +46,7 @@ function __init__(){
   });
   document.addEventListener('backbutton',Leader.onBack,false);
 
+  enableBackgroundMode(true); //enable background mode
   /*var startEvent="peopleready";
   contactEvent=null;
   if(typeof(cordova)!="undefined"){
