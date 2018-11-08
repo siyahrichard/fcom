@@ -283,7 +283,7 @@ this.fileInputs=[];
 		msg.value=bvalue;
 		msg.moment=moment_backup;
 		CMessage.activeObject=null; //clear CMessage.activeObject
-		
+		console.log('sendText() has called');
 	};
 	this.checkInput=function(event)
 	{
@@ -393,7 +393,7 @@ Messenger.config=function()
 	Messenger.sendBox=[];
 	Messenger.uploadQueMessages=[];
 	
-	//@debug:UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.43.201/CloudFile/Mirror/");
+	UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.43.201/CloudFile/Mirror/");
 	//debug:UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.1.3/CloudFile/Mirror/");
 	
 	//set a file mirror
@@ -1555,6 +1555,10 @@ Conversation.get=function(arg,last)
 		for(var i=0;i<ls.length;i++){
 			//Conversation.load(ls[i].uid,ls[i]);
 			Conversation.load(ls[i].conv,ls[i]);
+		}
+		if(ls.length>0){
+			var p="."; if(ls.length>1)p="s.";
+			showNotification("You have "+ls.length+ " new message"+p);
 		}
 		setTimeout(Conversation.get,Messenger.receiveDelay*3);
 	}else{

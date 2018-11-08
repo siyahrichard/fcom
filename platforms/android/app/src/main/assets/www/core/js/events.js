@@ -131,9 +131,11 @@ function configBackgroundMode(){
 }
 function showNotification(msg){
 	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
-			cordova.plugins.backgroundMode.setDefaults({
-			title: "Flask",
-			text: msg
-		});
+			if(cordova.plugins.backgroundMode.isActive()){
+				cordova.plugins.backgroundMode.setDefaults({
+				title: "Flask",
+				text: msg
+			});
+		}
 	}
 }
