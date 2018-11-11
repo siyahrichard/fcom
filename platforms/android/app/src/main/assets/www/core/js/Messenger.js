@@ -526,7 +526,7 @@ Messenger.getStatus=function(res)
 		Messenger.updateStatus(JSON.parse(res));
 		if(Messenger.seenIndex>seen_index)Messenger.statusDelayMultiplier=1; //reset multiplier if index was changed
 		else if(!Messenger.notifySent && Messenger.statusDelayMultiplier>1){
-			MSGNotify.set(Messenger.targetUID,Messenger.currentUID,1);//add one notification about me ( the user ) to the audience
+			MSGNotify.set(Messenger.activeObject.targetUID,Messenger.currentUID,1);//add one notification about me ( the user ) to the audience
 			Messenger.notifySent=true;//avoid sending multiple notification for a message
 		}
 		Messenger.statusDelayMultiplier++;

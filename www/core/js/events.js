@@ -105,7 +105,7 @@ function onErrorMyProfileImage(e){
 }
 
 function enableBackgroundMode(en){
-	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
+	if(typeof(cordova)!="undefined")if(cordova.plugins)if(cordova.plugins.backgroundMode){
 		if(en)cordova.plugins.backgroundMode.enable();
 		else cordova.plugins.backgroundMode.disable();
 		configBackgroundMode();
@@ -130,8 +130,8 @@ function configBackgroundMode(){
 		});
 }
 function showNotification(msg){
-	if(cordova)if(cordova.plugins)if(cordova.plugins.backgroundMode){
-			if(cordova.plugins.backgroundMode.isActive()){
+	if(typeof(cordova)!="undefined")if(cordova.plugins)if(cordova.plugins.backgroundMode){
+			if(cordova.plugins.backgroundMode.isActive() || true){
 				cordova.plugins.backgroundMode.setDefaults({
 				title: "Flask",
 				text: msg
