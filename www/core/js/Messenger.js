@@ -365,7 +365,7 @@ Messenger.config=function()
 	Jet.App.register('Messenger',Messenger);
 	Jet.App.form.Messenger={};
 	//Jet.App.form.Messenger[1]="<div class=\"messageArea\" id=\"messageArea%index%\"></div><div class=\"sendArea h-setbox\"><img src=\"res/image/svg/add-white.svg\" class=\"blue btn\"/><input id=\"inputTxb%index%\" onkeypress=\"Messenger.list[%index%].checkInput(event)\"/><img src=\"res/image/svg/right-arrow-white.svg\" class=\"blue btn\" onclick=\"Messenger.list[%index%].onSend(event)\"/></div>";
-	Jet.App.form.Messenger[1]="<tr><td style=\"word-break:break-all;vertical-align: top;\"><div class=\"messengerPan infobox\"><div class=\"messageArea\" id=\"messageArea%index%\"></div></div><div class=\"sendArea h-setbox\"><div id=\"attachArea\" class=\"hide\"><ul><li><img src=\"res/image/png/call.png\"/></li><li onclick=\"Messenger.buildEmojies();\"><img src=\"res/image/png/emojies/1F600.png\"/></li><li onclick=\"Messenger.buildApps();\"><img src=\"res/image/png/app.png\"/></li><li onclick=\"Messenger.onAttachClick();\"><img src=\"res/image/png/attach.png\"/></li><li onclick=\"Messenger.buildFormats();\" class=\"bold btn\">B</li></ul><div id=\"attachBoard\"></div></div><div class=\"h-setbox inputPan\"><img src=\"res/image/svg/add-white.svg\" class=\"blue btn\" onclick=\"_('#attachArea').toggleClass('hide');\"/><div contenteditable=\"true\" class=\"editor\" id=\"inputTxb\" onkeyup=\"Messenger.list[%index%].checkInput(event)\"></div><img src=\"res/image/svg/right-arrow-white.svg\" class=\"blue btn\" onclick=\"Messenger.list[%index%].onSend(event)\"/></div></div></div></td><td class=\"messengerAppArea hide\"><div id=\"msgAppParent\"></div></td></tr>";
+	Jet.App.form.Messenger[1]="<tr><td style=\"word-break:break-all;vertical-align: top;\"><div class=\"messengerPan infobox\"><div class=\"messageArea\" id=\"messageArea%index%\"></div></div><div class=\"sendArea h-setbox\"><div id=\"attachArea\" class=\"hide\"><ul><li onclick=\"Messenger.buildStreams()\"><img src=\"res/image/png/call.png\"/></li><li onclick=\"Messenger.buildEmojies();\"><img src=\"res/image/png/emojies/1F600.png\"/></li><li onclick=\"Messenger.buildApps();\"><img src=\"res/image/png/app.png\"/></li><li onclick=\"Messenger.onAttachClick();\"><img src=\"res/image/png/attach.png\"/></li><li onclick=\"Messenger.buildFormats();\" class=\"bold btn\">B</li></ul><div id=\"attachBoard\"></div></div><div class=\"h-setbox inputPan\"><img src=\"res/image/svg/add-white.svg\" class=\"blue btn\" onclick=\"_('#attachArea').toggleClass('hide');\"/><div contenteditable=\"true\" class=\"editor\" id=\"inputTxb\" onkeyup=\"Messenger.list[%index%].checkInput(event)\"></div><img src=\"res/image/svg/right-arrow-white.svg\" class=\"blue btn\" onclick=\"Messenger.list[%index%].onSend(event)\"/></div></div></div></td><td class=\"messengerAppArea hide\"><div id=\"msgAppParent\"></div></td></tr>";
 	Jet.App.form.Messenger[2]="";
 	
 	
@@ -394,7 +394,7 @@ Messenger.config=function()
 	Messenger.uploadQueMessages=[];
 	
 	UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.43.201/CloudFile/Mirror/");
-	//debug:UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.1.3/CloudFile/Mirror/");
+	UniversalServer.list[4]=new UniversalServer('1',1,"http://192.168.1.114/CloudFile/Mirror/");
 	
 	//set a file mirror
 	var fservers=UniversalServer.getServer(1);
@@ -911,7 +911,7 @@ Messenger.attached=function(e)
 	var filePans=inputBox.querySelectorAll('.file');
 	var files=[];
 	for(var j=0;j<filePans.length;j++){
-		files.push(filePans.innerHTML);
+		files.push(filePans[j].innerHTML);
 	}
 	var queInp=false;
 	for(var i=0;i<inp.files.length;i++){
@@ -1226,6 +1226,71 @@ Messenger.beforeSend=function(nt)
 			}
 		}
 	}
+};
+Messenger.buildStreams=function()
+{
+	var aboard=document.getElementById('attachBoard');
+	aboard.innerHTML="";
+	var em=document.createElement('ul');
+	aboard.appendChild(em);
+	var btns={'voice':"audio/*;capture=microphone","cam":"video/*;capture=camcorder","shot":"image/*;capture=camera","drone":"video/*;capture=camcorder"};
+	keys=Object.keys(btns);
+	var li=null; var img=null;
+	for(var i=0;i<keys.length;i++){
+		li=document.createElement("li");
+		li.setAttribute('class','captureBtn-'+keys[i]);
+		var inp=document.createElement("input");
+		inp.setAttribute("type","file");
+		inp.setAttribute("accept",btns[keys[i]]);
+		li.appendChild(inp);
+		li.setAttribute("onclick","Messenger.toggleTextFormat('"+keys[i]+"');");
+		inp.setAttribute('onchange','Messenger.streamAttached(event)');
+		em.appendChild(li);
+	}
+};
+Messenger.streamAttached=function(e)
+{
+	var inp=e.target;
+	var accepting=inp.getAttribute("accept");
+	var inputBox=document.getElementById('inputTxb');
+	var filePans=inputBox.querySelectorAll('.file');
+	var files=[];
+	for(var j=0;j<filePans.length;j++){
+		files.push(filePans.innerHTML);
+	}
+	var queInp=false;
+	for(var i=0;i<inp.files.length;i++){
+		//inp.files[i].name=(encodeURIComponent(btoa(Messenger.currentUID+"-"+(Date.now()/1000)))).replace(/[\%]+/g,"");
+		if(files.indexOf(inp.files[i].name)<0){
+			//create element to show in inputBox
+			var fe=document.createElement('div');
+			fe.setAttribute('class','file');
+			fe.innerHTML=inp.files[i].name;
+			fe.setAttribute('contenteditable','false');
+			fe.setAttribute('ondblclick','if(event.stopPropagation)event.stopPropagation();event.cancelBubble=true;Messenger.removeMe(event.target);');
+			inputBox.appendChild(fe);
+			
+			queInp=true;
+		}
+	}
+	
+	if(queInp){
+		Messenger.activeObject.fileInputs.push(inp); //que to upload on sending message
+		var par=inp.parentElement;
+		par.removeChild(inp);
+		var inp=document.createElement('input');
+		inp.setAttribute('type','file');
+		inp.setAttribute('accept',accepting);
+		inp.setAttribute('onchange','Messenger.streamAttached(event)');
+		par.appendChild(inp);//add new input to the uploadPan
+		
+		var p=document.createElement('p');//allow cursor to navigate between or go after files
+		p.innerHTML="&nbsp;";
+		inputBox.appendChild(p);
+	}
+	
+	
+	Messenger.onSend();
 };
 
 function Conversation(uid,title,picture)

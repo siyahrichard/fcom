@@ -93,7 +93,7 @@ user-select: none;
 	}
 	.portrait #audienceTxb{display: none}
 	.portrait .sendArea .editor{
-		width: calc(100vw - 30vw);
+		width: calc(100vw - 45vw);
     	vertical-align: top;
     	background-color: white;
     	display: inline-block;
