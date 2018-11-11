@@ -112,12 +112,12 @@ function enableBackgroundMode(en){
 
 		cordova.plugins.backgroundMode.on('activate', function() {
 			cordova.plugins.backgroundMode.disableWebViewOptimizations(); 
-			Messenger.receiveDelay=25000;
+			//Messenger.receiveDelay=25000;
 			if(Messenger.activeObject)Messenger.activeObject.exit();
 		});
 
 		cordova.plugins.backgroundMode.on('deactivate', function() {
-			Messenger.receiveDelay=5000;
+			//Messenger.receiveDelay=5000;
 			//Messenger.onHome();
 		});
 	}
